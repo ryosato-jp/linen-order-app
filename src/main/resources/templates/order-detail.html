@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>発注履歴</title>
+</head>
+<body>
+
+<h2>発注履歴詳細<h2>
+
+<p>
+	<strong>施設：</strong>
+	<span th:text="${facilityName}">施設名</span>
+</p>
+
+<p>
+	<strong>発注ID：</strong>
+	<span th:text="${header.id}">1</span>
+</p>
+
+<p>
+	<strong>発注日：</strong>
+	<span th:text="${header.orderDate}">2026-01-01</span>
+</p>
+
+<table border="1">
+	<tr>
+		<th>製品名</th>
+		<th>現在庫</th>
+		<th>次回納品数</th>
+		<th>基準在庫</th>
+		<th>発注数</th>
+	</tr>
+	
+	<tr th:each="d : ${details}">
+		<td th:text="${d.linenItem.name}">シーツ</td>
+		<td th:text="${d.currentStock}">10</td>
+		<td th:text="${d.nextDelivery}">5</td>
+		<td th:text="${d.baseStock}">50</td>
+		<td th:text="${d.orderQuantity}">20</td>
+	<tr>
+</table>
+
+<br>
+
+<a th:href="@{'/orders/' + ${header.id} + '/csv'}">
+	CSV出力
+</a>
+
+<br><br>
+
+<a href="/orders/history">発注履歴一覧へ戻る</a> |
+<a href="/dashboard">ダッシュボードへ</a>
+
+</body>
+</html>

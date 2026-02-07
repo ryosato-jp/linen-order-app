@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>発注完了</title>
+</head>
+<body>
+
+<h2>発注が完了しました</h2>
+
+<p>
+	<strong>施設名:</strong>
+	<span th:text="${facilityName}">施設名</span>
+</p>
+
+<p>
+	<strong>発注ID:</strong>
+	<span th:text="${orderId}">123</span>
+</p>
+
+<p>
+	<strong>発注日:</strong>
+	<span th:text="${orderDate}">2026-01-01</span>
+</p>
+
+<hr>
+
+<p>発注内容は正常に保存されました。</p>
+
+<br>
+
+<a href="/dashboard">ダッシュボードへ戻る</a>
+
+</body>
+</html>

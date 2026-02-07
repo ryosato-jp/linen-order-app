@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+</head>
+<body>
+ <h2>病院向けリネン発注システム</h2>
+ 
+ <form action="/login" method="post">
+	<div>
+	  <label>施設ID</label>
+	  <input type="text" name="loginId">
+	</div>
+	<div>
+		<label>パスワード</label>
+		<input type="password" name="password">
+	</div>
+	<button type="submit">ログイン</button>
+	</form>
+</body>
+</html>

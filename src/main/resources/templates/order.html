@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>発注数計算</title>
+
+<style>
+	/* 発注数が0の行をグレーアウト */
+	.inactive{
+		color: #999;
+	}
+</style>
+
+</head>
+<body>
+	
+<h2>発注数計算</h2>
+<p th:text="'施設：' + ${facilityName}">施設名</p>
+
+<form th:action="@{/order/calculate}" method="post">
+	<!-- table -->
+
+	<table border="1">
+		<tr>
+			<th>製品名</th>
+			<th>現在庫数</th>
+			<th>次回納品数(自動)</th>
+			<th>基準在庫(定数)</th>
+			<th>発注数</th>
+		</tr>
+		
+		<tr th:each="f, stat : ${facilityLinens}"
+		    th:classappend="${orderQuantities != null and orderQuantities[stat.index] == 0} ? 'inactive' : ''">
+
+			<!-- アイテム名 -->
+			<td th:text="${f.linenItem.name}">アイテム</td>
+			
+			<!-- 現在在庫数:ユーザー入力 -->
+			<td>
+				<input type="number" name="currentStock" min="0" required>
+			</td>
+			
+			<!-- 次回納品数:自動(前回発注数の半数) -->
+			<td>
+				<input type="number" name="nextDelivery"
+				       th:value="${nextDeliveries != null ? nextDeliveries[stat.index] : 0}"
+					   min="0">
+			</td>
+			
+			<!-- 基準在庫(定数):表示のみ-->
+			<td>
+				<span class="readonly-box"  th:text="${f.baseStock}" >100</span>
+				<!-- 計算用にhiddenで送る -->
+				<input type="hidden" name="baseStock" th:value="${f.baseStock}">
+			</td>
+			
+			<!-- 発注数表示(indexで対応) -->
+			<td>
+				<span th:if="${orderQuantities != null}"
+				      th:text="${orderQuantities[stat.index]}">0</span>
+			</td>
+			
+		</tr>
+</table>
+	
+<br>
+<button type="submit">一括計算</button>
+</form>
+
+<!-- ★計算後だけ「確定」ボタンを表示(/order/confirmにPOST)-->
+<div th:if="${orderQuantities != null}">
+	<br>
+	<form th:action="@{/order/confirm}" method="post">
+		<button type="submit">確定（DBに保存）</button>
+	</form>
+</div>
+
+<br>
+<a href="/dashboard">ダッシュボードへ戻る</a>
+&nbsp;|&nbsp;
+<a href="/facility/settings">基準在庫(定数)設定へ</a>
+
+</body>
+</html>

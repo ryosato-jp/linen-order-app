@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>基準在庫設定</title>
+</head>
+<body>
+
+<h2>基準在庫（定数）設定</h2>
+<p th:text="'施設：' + ${facilityName}">施設名</p>
+
+<table border="1">
+	 <tr>
+		<th>アイテム</th>
+		<th>基準在庫（定数）</th>
+		<th>更新</th>
+	</tr>
+	
+	<tr th:each="f1 : ${facilityLinens}">
+		<td th:text="${f1.linenItem.name}">アイテム名</td>
+		
+		<td>
+			<form action="/facility/settings" method="post">
+				<!-- 更新対象のfacility_linen_id -->
+				<input type="hidden" name="id" th:value="${f1.id}">
+				<input type="number" name="baseStock" th:value="${f1.baseStock}" min="0">
+				<button type="submit">保存</button>
+			</form>
+		</td>
+		
+		<td>※誤操作防止のため1件ずつ保存</td>
+	</tr>
+</table>
+
+<br>
+<a href="/dashboard">ダッシュボードへ</a>
+
+</body>
+</html>

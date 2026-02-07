@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>ダッシュボード</title>
+</head>
+<body>
+	
+	<h2>リネン発注システム</h2>
+	<h2 th:text="'施設：' + ${facilityName}">施設名</h2>
+	
+	<hr>
+	
+	<h3>発注業務</h3>	
+	<p>在庫数を入力して、次回発注数を計算します。</p>
+	<a href="/order">
+		<button>発注計算へ</button>
+	</a>
+	
+	<hr>
+	
+	<h3>基準在庫(定数)設定</h3>
+	<p style="color: red;">
+	＊通常は変更不要です。
+	</p>
+	<a href="/facility/settings">
+		<button>基準在庫を設定する</button>
+	</a>
+	
+	<hr>
+	
+	<a href="/orders/history">発注履歴を確認</a>
+	
+</body>
+</html>
