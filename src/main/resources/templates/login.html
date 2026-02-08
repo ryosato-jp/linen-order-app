@@ -3,20 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <title>Login</title>
+<style>
+  .form-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 10px 0;
+  }
+  .form-row label {
+    width: 90px;         /* ラベル幅固定 */
+  }
+  .form-row input {
+    width: 220px;        /* 入力欄幅固定 */
+    padding: 6px 8px;
+    box-sizing: border-box;
+  }
+  .form-actions {
+    margin-top: 12px;
+  }
+</style>
 </head>
 <body>
- <h2>病院向けリネン発注システム</h2>
- 
- <form action="/login" method="post">
-	<div>
-	  <label>施設ID</label>
-	  <input type="text" name="loginId">
-	</div>
-	<div>
-		<label>パスワード</label>
-		<input type="password" name="password">
-	</div>
-	<button type="submit">ログイン</button>
-	</form>
+  <h2>病院向けリネン発注システム</h2>
+
+  <form action="/login" method="post">
+    <div class="form-row">
+      <label for="loginId">施設ID</label>
+      <input id="loginId" type="text" name="loginId" required>
+    </div>
+
+    <div class="form-row">
+      <label for="password">パスワード</label>
+      <input id="password" type="password" name="password" required>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit">ログイン</button>
+    </div>
+  </form>
 </body>
 </html>

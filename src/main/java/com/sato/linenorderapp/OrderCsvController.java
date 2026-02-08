@@ -56,7 +56,7 @@ public class OrderCsvController {
 		// ==== レスポンス設定 ====
 		response.setContentType("text/csv; charset=UTF-8");
 		response.setHeader(
-				"Content-Dispositon",
+				"Content-Disposition",
 				"attachment; filename=order_" + orderId + ".csv");
 		
 		PrintWriter writer = response.getWriter();
