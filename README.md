@@ -105,11 +105,17 @@ CREATE DATABASE linen_order_app
 ---
 
 ### 2) アプリ用ユーザー作成（任意）
-既に linen ユーザーがある場合は不要です。
+既に `linen` ユーザーがある場合は不要です。  
+この手順で設定したパスワードは、後の `DB_PASS`（環境変数）に使用します。
 
 ```sql
-CREATE USER 'linen'@'localhost' IDENTIFIED BY '任意のパスワード';
+-- 例：アプリ用ユーザー作成（パスワードは任意）
+CREATE USER 'linen'@'localhost' IDENTIFIED BY 'your_password';
+
+-- DBに対する権限付与
 GRANT ALL PRIVILEGES ON linen_order_app.* TO 'linen'@'localhost';
+
+-- 反映
 FLUSH PRIVILEGES;
 ```
 
