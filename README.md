@@ -117,7 +117,7 @@ FLUSH PRIVILEGES;
 
 ### 3) 初期データ投入（db/data.sql）
 プロジェクト直下（pom.xml がある階層）で、以下を実行します。
-日本語データを入れるため、文字化け対策として --default-character-set=utf8mb4 を付けています。
+日本語データを入れるため、文字化け対策として--default-character-set=utf8mb4を付けています。
 Windows（cmd）例：
 
 ```bat
@@ -148,8 +148,8 @@ $env:DB_PASS="（手順2で設定したパスワード）"
 ```
 
 Eclipseで設定する場合：
-［実行］→［実行構成…］→（Spring Boot App）→［環境］タブ
-DB_PASS を追加して起動
+- ［実行］→［実行構成…］→（Spring Boot App）→［環境］タブ
+- `DB_PASS` を追加して起動
 
 ---
 
@@ -163,7 +163,7 @@ cd C:\workspace\linen-order-app\linen-order-app
 
 起動後、ブラウザでアクセス：
 
-- http://localhost:8080/login
+`http://localhost:8080/login`
 
 ---
 
@@ -171,9 +171,7 @@ cd C:\workspace\linen-order-app\linen-order-app
 db/data.sql で以下の初期データを投入します。
 
 - 施設：病院1
-
 - ログインID：hospital1
-
 - パスワード：pass1
 
 ---
