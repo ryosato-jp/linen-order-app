@@ -34,11 +34,28 @@ public class OrderController {
     public String orderPage(HttpSession session, Model model) {
 
         Long facilityId = (Long) session.getAttribute("facilityId");
-        List<FacilityLinen> linens = facilityLinenRepository.findByFacilityId(facilityId);
-
+        List<FacilityLinen> linens = facilityLinenRepository.findByFacilityIdOrderByLinenItemIdAsc(facilityId);
+        
+        //初期表示：入力欄の初期値（現在庫0、次回納品0）
+        List<Integer> currentStocks = new ArrayList<>();
+        List<Integer> nextDeliveries = new ArrayList<>();
+        List<Integer> baseStockList = new ArrayList<>();
+        
+        for(FacilityLinen f : linens) {
+        	   currentStocks.add(0);
+        	   nextDeliveries.add(0);
+        	   baseStockList.add(f.getBaseStock());
+        	 }
+        
+        //画面に必要
         model.addAttribute("facilityName", session.getAttribute("facilityName"));
         model.addAttribute("facilityLinens", linens);
 
+        //再表示用
+        model.addAttribute("currentStocks", currentStocks);
+        model.addAttribute("nextDeliveries", nextDeliveries);
+        model.addAttribute("baseStockList", baseStockList);
+        
         return "order";
     }
 
@@ -76,16 +93,14 @@ public class OrderController {
 
         // 再表示用に必要な値を model に積む
         Long facilityId = (Long) session.getAttribute("facilityId");
-        List<FacilityLinen> linens = facilityLinenRepository.findByFacilityId(facilityId);
+        List<FacilityLinen> linens = facilityLinenRepository.findByFacilityIdOrderByLinenItemIdAsc(facilityId);
 
         model.addAttribute("facilityName", session.getAttribute("facilityName"));
         model.addAttribute("facilityLinens", linens);
         model.addAttribute("orderQuantities", orderQuantities);
-
-        // （order.html側で表示したいなら）入力値も返しておくと便利
-        model.addAttribute("currentStock", currentStock);
-        model.addAttribute("nextDelivery", nextDelivery);
-        model.addAttribute("baseStock", baseStock);
+        model.addAttribute("currentStocks", currentStock);
+        model.addAttribute("nextDeliveries", nextDelivery);
+        model.addAttribute("baseStockList", baseStock);
 
         return "order";
     }

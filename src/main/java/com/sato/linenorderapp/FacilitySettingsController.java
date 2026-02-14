@@ -28,7 +28,7 @@ public class FacilitySettingsController {
 		Long facilityId = (Long) session.getAttribute("facilityId");
 		String facilityName = (String) session.getAttribute("facilityName");
 		
-		List<FacilityLinen> linens = facilityLinenRepository.findByFacilityId(facilityId);
+		List<FacilityLinen> linens = facilityLinenRepository.findByFacilityIdOrderByLinenItemIdAsc(facilityId);
 		
 		model.addAttribute("facilityName", facilityName);
 		model.addAttribute("facilityLinens", linens);

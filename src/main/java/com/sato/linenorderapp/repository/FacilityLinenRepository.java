@@ -10,5 +10,5 @@ public interface FacilityLinenRepository
 		extends JpaRepository<FacilityLinen, Long> {
 
 	// ログイン施設が扱うアイテム+定数をすべて習得
-	List<FacilityLinen> findByFacilityId(Long facilityId);
+	List<FacilityLinen> findByFacilityIdOrderByLinenItemIdAsc(Long facilityId);
 }

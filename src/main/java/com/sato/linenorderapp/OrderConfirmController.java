@@ -62,7 +62,7 @@ public String confirmOrder(HttpSession session, Model model) {
 	(List<Integer>) session.getAttribute("orderQuantities");
 	
 	List<FacilityLinen> linens =
-			facilityLinenRepo.findByFacilityId(facilityId);
+			facilityLinenRepo.findByFacilityIdOrderByLinenItemIdAsc(facilityId);
 	
 	// ヘッダ作成
 	OrderHeader header = new OrderHeader();

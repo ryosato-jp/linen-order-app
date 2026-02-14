@@ -40,7 +40,7 @@
 				       name="currentStock" 
 					   min="0" 
 					   required 
-					   th:value="${currentStocks != null ? currentStocks[stat.index] : ``}">
+					   th:value="${currentStocks != null ? currentStocks[stat.index] : ''}">
 					   
 			</td>
 			
@@ -56,7 +56,9 @@
 			<td>
 				<span class="readonly-box"  th:text="${f.baseStock}" >100</span>
 				<!-- 計算用にhiddenで送る -->
-				<input type="hidden" name="baseStock" th:value="${f.baseStock}">
+				<input type="hidden" 
+				       name="baseStock" 
+					   th:value="${baseStockList != null ? baseStockList[stat.index] : f.baseStock}">
 			</td>
 			
 			<!-- 発注数表示(indexで対応) -->
@@ -82,7 +84,7 @@
 			<input type="hidden" name="facilityLinenID" th:value="${f.id}">
 			<input type="hidden" name="currentStock" th:value="${currentStocks[stat.index]}">
 			<input type="hidden" name="nextDelivery" th:value="${nextDeliveries[stat.index]}">
-			<input type="hidden" name="baseStock" th:value="$baseStockList[stat.index]}">
+			<input type="hidden" name="baseStock" th:value="${baseStockList[stat.index]}">
 			<input type="hidden" name="orderQuantity" th:value="${orderQuantities[stat.index]}">
 		</div>
 		
