@@ -34,10 +34,6 @@ public class OrderController {
     public String orderPage(HttpSession session, Model model) {
 
         Long facilityId = (Long) session.getAttribute("facilityId");
-        if (facilityId == null) {
-            return "redirect:/login";
-        }
-
         List<FacilityLinen> linens = facilityLinenRepository.findByFacilityId(facilityId);
 
         model.addAttribute("facilityName", session.getAttribute("facilityName"));
@@ -57,13 +53,12 @@ public class OrderController {
             Model model,
             HttpSession session) {
 
-        Long facilityId = (Long) session.getAttribute("facilityId");
-        if (facilityId == null) {
-            return "redirect:/login";
-        }
+       //画面の不正入力/改ざん対策：配列サイズが揃っていないなら戻す
+    	if(currentStock.size() != nextDelivery.size() || currentStock.size() != baseStock.size()){
+    		return "redirect:/order";
+    	}
 
         List<Integer> orderQuantities = new ArrayList<>();
-
         for (int i = 0; i < baseStock.size(); i++) {
             int qty = orderCalculationService.calculateOrderQuantity(
                     currentStock.get(i),
@@ -80,6 +75,7 @@ public class OrderController {
         session.setAttribute("orderQuantities", orderQuantities);
 
         // 再表示用に必要な値を model に積む
+        Long facilityId = (Long) session.getAttribute("facilityId");
         List<FacilityLinen> linens = facilityLinenRepository.findByFacilityId(facilityId);
 
         model.addAttribute("facilityName", session.getAttribute("facilityName"));

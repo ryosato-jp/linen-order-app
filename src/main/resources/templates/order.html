@@ -18,7 +18,6 @@
 <p th:text="'施設：' + ${facilityName}">施設名</p>
 
 <form th:action="@{/order/calculate}" method="post">
-	<!-- table -->
 
 	<table border="1">
 		<tr>
@@ -37,14 +36,20 @@
 			
 			<!-- 現在在庫数:ユーザー入力 -->
 			<td>
-				<input type="number" name="currentStock" min="0" required>
+				<input type="number"
+				       name="currentStock" 
+					   min="0" 
+					   required 
+					   th:value="${currentStocks != null ? currentStocks[stat.index] : ``}">
+					   
 			</td>
 			
-			<!-- 次回納品数:自動(前回発注数の半数) -->
+			<!-- 次回納品数:自動入力(前回発注数の半数)編集可能 -->
 			<td>
-				<input type="number" name="nextDelivery"
-				       th:value="${nextDeliveries != null ? nextDeliveries[stat.index] : 0}"
-					   min="0">
+				<input type="number" 
+			           name="nextDelivery"
+					   min="0"
+				       th:value="${nextDeliveries != null ? nextDeliveries[stat.index] : 0}">
 			</td>
 			
 			<!-- 基準在庫(定数):表示のみ-->
@@ -70,7 +75,17 @@
 <!-- ★計算後だけ「確定」ボタンを表示(/order/confirmにPOST)-->
 <div th:if="${orderQuantities != null}">
 	<br>
+	
 	<form th:action="@{/order/confirm}" method="post">
+		
+		<div th:each="f, stat : ${facilityLinens}">
+			<input type="hidden" name="facilityLinenID" th:value="${f.id}">
+			<input type="hidden" name="currentStock" th:value="${currentStocks[stat.index]}">
+			<input type="hidden" name="nextDelivery" th:value="${nextDeliveries[stat.index]}">
+			<input type="hidden" name="baseStock" th:value="$baseStockList[stat.index]}">
+			<input type="hidden" name="orderQuantity" th:value="${orderQuantities[stat.index]}">
+		</div>
+		
 		<button type="submit">確定（DBに保存）</button>
 	</form>
 </div>
