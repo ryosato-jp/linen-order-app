@@ -85,12 +85,6 @@ public class OrderController {
             orderQuantities.add(qty);
         }
 
-        // 確定画面(POST /order/confirm)で使うので session に保持
-        session.setAttribute("currentStock", currentStock);
-        session.setAttribute("nextDelivery", nextDelivery);
-        session.setAttribute("baseStock", baseStock);
-        session.setAttribute("orderQuantities", orderQuantities);
-
         // 再表示用に必要な値を model に積む
         Long facilityId = (Long) session.getAttribute("facilityId");
         List<FacilityLinen> linens = facilityLinenRepository.findByFacilityIdOrderByLinenItemIdAsc(facilityId);

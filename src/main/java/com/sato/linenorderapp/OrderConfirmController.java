@@ -7,8 +7,8 @@ import java.util.List;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sato.linenorderapp.entity.Facility;
 import com.sato.linenorderapp.entity.FacilityLinen;
@@ -32,7 +32,6 @@ public class OrderConfirmController {
 			OrderDetailRepository detailRepo,
 			FacilityRepository facilityRepo,
 			FacilityLinenRepository facilityLinenRepo) {
-		
 		this.headerRepo = headerRepo;
 		this.detailRepo = detailRepo;
 		this.facilityRepo = facilityRepo;
@@ -40,29 +39,23 @@ public class OrderConfirmController {
 }
 	
 @PostMapping("/order/confirm")
-public String confirmOrder(HttpSession session, Model model) {
+public String confirmOrder(
+		HttpSession session,
+		@RequestParam Long facilityId,
+		@RequestParam List<Long> facilityLinenId,
+		@RequestParam List<Integer> currentStock,
+		@RequestParam List<Integer> nextDelivery,
+		@RequestParam List<Integer> baseStock,
+		@RequestParam List<Integer> orderQuantity
+		) {
 	
-	Long facilityId = (Long) session.getAttribute("facilityId");
-	Facility facility = facilityRepo.findById(facilityId).orElseThrow();
+	// おおまかにガード（サイズ不一致は止める）
+	int n = facilityLinenId.size();
+	if(currentStock.size() != n || nextDelivery.size() != n || baseStock.size() != n || orderQuantity.size() != n) {
+		return "redirect:/order";
+	}
 	
-	@SuppressWarnings("unchecked")
-	List<Integer> currentStock =
-	(List<Integer>) session.getAttribute("currentStock");
-	
-	@SuppressWarnings("unchecked")
-	List<Integer> nextDelivery =
-	(List<Integer>) session.getAttribute("nextDelivery");
-	
-	@SuppressWarnings("unchecked")
-	List<Integer> baseStock =
-	(List<Integer>) session.getAttribute("baseStock");
-	
-	@SuppressWarnings("unchecked")
-	List<Integer> orderQty =
-	(List<Integer>) session.getAttribute("orderQuantities");
-	
-	List<FacilityLinen> linens =
-			facilityLinenRepo.findByFacilityIdOrderByLinenItemIdAsc(facilityId);
+	Facility facility= facilityRepo.findById(facilityId).orElseThrow();
 	
 	// ヘッダ作成
 	OrderHeader header = new OrderHeader();
@@ -73,23 +66,26 @@ public String confirmOrder(HttpSession session, Model model) {
 	// 明細作成
 	List<OrderDetail> details = new ArrayList<>();
 	
-	for(int i = 0; i < linens.size(); i++) {
+	for(int i = 0; i < n; i++) {
+		FacilityLinen fl = facilityLinenRepo.findById(facilityLinenId.get(i)).orElseThrow();
+		
+		//他施設のIDが混ざっても保存されないように防御
+		if(!fl.getFacility().getId().equals(facilityId)) {
+			return "redirect:/order";
+		}
+		
 		OrderDetail d = new OrderDetail();
 		d.setOrderHeader(header);
-		d.setLinenItem(linens.get(i).getLinenItem());
+		d.setLinenItem(fl.getLinenItem());
 		d.setCurrentStock(currentStock.get(i));
 		d.setNextDelivery(nextDelivery.get(i));
 		d.setBaseStock(baseStock.get(i));
-		d.setOrderQuantity(orderQty.get(i));
+		d.setOrderQuantity(orderQuantity.get(i));
+		
 		details.add(d);
 	}
 	
 	detailRepo.saveAll(details);
-	
-	// 完了画面用データ
-	model.addAttribute("orderId", header.getId());
-	model.addAttribute("orderDate", header.getOrderDate());
-	model.addAttribute("facilityName", facility.getName());
 	
 	return "order-complete";
 	
