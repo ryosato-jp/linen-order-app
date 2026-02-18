@@ -1,7 +1,10 @@
 package com.sato.linenorderapp;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -12,7 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sato.linenorderapp.entity.FacilityLinen;
+import com.sato.linenorderapp.entity.OrderDetail;
+import com.sato.linenorderapp.entity.OrderHeader;
 import com.sato.linenorderapp.repository.FacilityLinenRepository;
+import com.sato.linenorderapp.repository.OrderDetailRepository;
+import com.sato.linenorderapp.repository.OrderHeaderRepository;
 import com.sato.linenorderapp.service.OrderCalculationService;
 
 @Controller
@@ -20,11 +27,17 @@ public class OrderController {
 
     private final OrderCalculationService orderCalculationService;
     private final FacilityLinenRepository facilityLinenRepository;
+    private final OrderHeaderRepository orderHeaderRepo;
+    private final OrderDetailRepository orderDetailRepo;
 
     public OrderController(OrderCalculationService orderCalculationService,
-                           FacilityLinenRepository facilityLinenRepository) {
+                           FacilityLinenRepository facilityLinenRepository,
+                           OrderHeaderRepository orderHeaderRepo,
+                           OrderDetailRepository orderDetailRepo) {
         this.orderCalculationService = orderCalculationService;
         this.facilityLinenRepository = facilityLinenRepository;
+        this.orderHeaderRepo = orderHeaderRepo;
+        this.orderDetailRepo = orderDetailRepo;
     }
 
     /**
@@ -36,14 +49,36 @@ public class OrderController {
         Long facilityId = (Long) session.getAttribute("facilityId");
         List<FacilityLinen> linens = facilityLinenRepository.findByFacilityIdOrderByLinenItemIdAsc(facilityId);
         
-        //初期表示：入力欄の初期値（現在庫0、次回納品0）
+        //初期表示：入力欄の初期値（現在庫0、次回納品=前回の半分、初回は0）
         List<Integer> currentStocks = new ArrayList<>();
         List<Integer> nextDeliveries = new ArrayList<>();
         List<Integer> baseStockList = new ArrayList<>();
         
+        //前回発注の取得(1件)
+        Optional<OrderHeader> lastOpt = orderHeaderRepo.findTopByFacilityIdOrderByOrderDateDescIdDesc(facilityId);
+        
+        //linenItemId -> 前回発注数
+        Map<Long, Integer> lastQtyByItemId = new HashMap<>();
+        
+        if(lastOpt.isPresent()){
+        	Long lastOrderId = lastOpt.get().getId();
+        	
+        	//前回発注の明細を取得
+        	List<OrderDetail> details = orderDetailRepo.findByOrderHeaderIdOrderByIdAsc(lastOrderId);
+        	
+        	for (OrderDetail d : details) {
+        		lastQtyByItemId.put(d.getLinenItem().getId(),d.getOrderQuantity());
+        	}
+}
+        
+        //facilityLinensの並びに合わせて初期リスト作成
         for(FacilityLinen f : linens) {
         	   currentStocks.add(0);
-        	   nextDeliveries.add(0);
+        	   
+        	   Integer lastQty = lastQtyByItemId.get(f.getLinenItem().getId());
+        	   int half = (lastQty == null) ? 0 : (lastQty / 2);
+        	   nextDeliveries.add(half);
+        	   
         	   baseStockList.add(f.getBaseStock());
         	 }
         

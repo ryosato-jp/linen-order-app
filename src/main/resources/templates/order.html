@@ -80,8 +80,10 @@
 	
 	<form th:action="@{/order/confirm}" method="post">
 		
+		<input type="hidden" name="facilityId" th:value="${facilityId}">
+		
 		<div th:each="f, stat : ${facilityLinens}">
-			<input type="hidden" name="facilityLinenID" th:value="${f.id}">
+			<input type="hidden" name="facilityLinenId" th:value="${f.id}">
 			<input type="hidden" name="currentStock" th:value="${currentStocks[stat.index]}">
 			<input type="hidden" name="nextDelivery" th:value="${nextDeliveries[stat.index]}">
 			<input type="hidden" name="baseStock" th:value="${baseStockList[stat.index]}">
