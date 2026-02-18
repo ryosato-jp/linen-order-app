@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<h2>発注履歴詳細</h2>
+<h2>発注履歴</h2>
 
 <p>
 	<strong>施設：</strong>
@@ -20,7 +20,7 @@
 
 <p>
 	<strong>発注日：</strong>
-	<span th:text="${header.orderDate}">2026-01-01</span>
+	<span th:text="${#temporals.format(header.orderDate, 'yyyy-MM-dd')}">2026-01-01</span>
 </p>
 
 <table border="1">
@@ -43,9 +43,7 @@
 
 <br>
 
-<a th:href="@{'/orders/' + ${header.id} + '/csv'}">
-	CSV出力
-</a>
+<a th:href="@{/orders/{id}/csv(id=${header.id})}">CSV出力</a>
 
 <br><br>
 

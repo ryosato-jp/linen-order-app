@@ -20,7 +20,7 @@
 
 <p>
 	<strong>発注日:</strong>
-	<span th:text="${orderDate}">2026-01-01</span>
+	<span th:text="${#temporals.format(orderDate, 'yyyy-MM-dd')}">2026-01-01</span>
 </p>
 
 <hr>

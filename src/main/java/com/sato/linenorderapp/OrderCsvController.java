@@ -51,7 +51,7 @@ public class OrderCsvController {
 		}
 		
 		List<OrderDetail> details =
-				detailRepo.findByOrderHeaderId(orderId);
+				detailRepo.findByOrderHeaderIdOrderByIdAsc(orderId);
 		
 		// ==== レスポンス設定 ====
 		response.setContentType("text/csv; charset=UTF-8");

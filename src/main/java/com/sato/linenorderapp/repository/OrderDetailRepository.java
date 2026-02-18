@@ -9,5 +9,5 @@ import com.sato.linenorderapp.entity.OrderDetail;
 public interface OrderDetailRepository
        extends JpaRepository<OrderDetail, Long>{
 	
-	List<OrderDetail> findByOrderHeaderId(Long orderHeaderId);
+	List<OrderDetail> findByOrderHeaderIdOrderByIdAsc(Long orderHeaderId);
 }

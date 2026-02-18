@@ -7,6 +7,7 @@ import java.util.List;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -41,13 +42,15 @@ public class OrderConfirmController {
 @PostMapping("/order/confirm")
 public String confirmOrder(
 		HttpSession session,
-		@RequestParam Long facilityId,
+		Model model,
 		@RequestParam List<Long> facilityLinenId,
 		@RequestParam List<Integer> currentStock,
 		@RequestParam List<Integer> nextDelivery,
 		@RequestParam List<Integer> baseStock,
 		@RequestParam List<Integer> orderQuantity
 		) {
+	
+	Long facilityId = (Long)session.getAttribute("facilityId");
 	
 	// おおまかにガード（サイズ不一致は止める）
 	int n = facilityLinenId.size();
@@ -86,6 +89,10 @@ public String confirmOrder(
 	}
 	
 	detailRepo.saveAll(details);
+	
+	model.addAttribute("facilityName", session.getAttribute("facilityName"));
+	model.addAttribute("orderId", header.getId());
+	model.addAttribute("orderDate", header.getOrderDate());
 	
 	return "order-complete";
 	

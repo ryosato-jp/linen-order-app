@@ -47,7 +47,7 @@ public class OrderDetailController {
 		}
 		
 		List<OrderDetail>details =
-				detailRepo.findByOrderHeaderId(orderId);
+				detailRepo.findByOrderHeaderIdOrderByIdAsc(orderId);
 		
 		model.addAttribute("header", header);
 		model.addAttribute("details", details);
