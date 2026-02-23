@@ -35,7 +35,7 @@ public class OrderDetailController {
 		
 		Long facilityId = (Long) session.getAttribute("facilityId");
 		if(facilityId == null) {
-			return "redirect;/login";
+			return "redirect:/login";
 		}
 		
 		OrderHeader header =

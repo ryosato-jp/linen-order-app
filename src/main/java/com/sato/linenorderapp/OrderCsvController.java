@@ -62,7 +62,7 @@ public class OrderCsvController {
 		PrintWriter writer = response.getWriter();
 		
 		// ===== ヘッダ行 ====
-		writer.println("発注ID,発注日,施設名,リネン名,発注数");
+		writer.println("発注ID,発注日,施設名,製品名,発注数");
 		
 		DateTimeFormatter fmt=
 				DateTimeFormatter.ofPattern("yyyy-MM-dd");
