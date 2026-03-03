@@ -3,6 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <title>発注履歴</title>
+
+<style>
+	.num{
+		text-align: right;
+	}
+</style>
+
 </head>
 <body>
 
@@ -34,10 +41,10 @@
 	
 	<tr th:each="d : ${details}">
 		<td th:text="${d.linenItem.name}">シーツ</td>
-		<td th:text="${d.currentStock}">10</td>
-		<td th:text="${d.nextDelivery}">5</td>
-		<td th:text="${d.baseStock}">50</td>
-		<td th:text="${d.orderQuantity}">20</td>
+		<td class="num" th:text="${#numbers.formatInteger(d.currentStock, 0, 'COMMA')}">10</td>
+		<td class="num" th:text="${#numbers.formatInteger(d.nextDelivery, 0, 'COMMA')}">5</td>
+		<td class="num" th:text="${#numbers.formatInteger(d.baseStock, 0, 'COMMA')}">50</td>
+		<td class="num" th:text="${#numbers.formatInteger(d.orderQuantity, 0, 'COMMA')}">20</td>
 	</tr>
 </table>
 

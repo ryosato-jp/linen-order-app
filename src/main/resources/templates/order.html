@@ -9,6 +9,16 @@
 	.inactive{
 		color: #999;
 	}
+	
+	/*数字は右寄せ*/
+	.num-input{
+		text-align: right;
+	}
+	
+	/*表示専用の数字*/
+	.num-cell{
+		text-align: right;
+	}
 </style>
 
 </head>
@@ -38,6 +48,7 @@
 			<td>
 				<input type="number"
 				       name="currentStock" 
+					   class="num-input"
 					   min="0" 
 					   required 
 					   th:value="${currentStocks != null ? currentStocks[stat.index] : ''}">
@@ -48,13 +59,15 @@
 			<td>
 				<input type="number" 
 			           name="nextDelivery"
+					   class="num-input"
 					   min="0"
 				       th:value="${nextDeliveries != null ? nextDeliveries[stat.index] : 0}">
 			</td>
 			
 			<!-- 基準在庫(定数):表示のみ-->
-			<td>
-				<span class="readonly-box"  th:text="${f.baseStock}" >100</span>
+			<td class="num-cell">
+				<span th:text="${#numbers.formatInteger(f.baseStock, 0, 'COMMA')}" >100</span>
+					  
 				<!-- 計算用にhiddenで送る -->
 				<input type="hidden" 
 				       name="baseStock" 
@@ -62,9 +75,9 @@
 			</td>
 			
 			<!-- 発注数表示(indexで対応) -->
-			<td>
+			<td class="num-cell">
 				<span th:if="${orderQuantities != null}"
-				      th:text="${orderQuantities[stat.index]}">0</span>
+				      th:text="${#numbers.formatInteger(orderQuantities[stat.index], 0, 'COMMA')}">0</span>
 			</td>
 			
 		</tr>
